@@ -1,0 +1,158 @@
+{% extends 'flowerdelivery/base.html' %}
+{% load custom_filters %}
+{% block content %}
+<div class="container mt-4">
+    <h1 class="my-4">Панель администратора</h1>
+
+    <!-- Форма фильтрации -->
+    <form method="get" class="mb-4">
+        <div class="d-flex align-items-end mb-3">
+            <!-- Фильтры по статусу и дате -->
+            <div class="mr-3">
+                <div class="form-group mb-0">
+                    <label for="status">Статус</label>
+                    <select name="status" id="status" class="form-control">
+                        <option value="">Все</option>
+                        <option value="Ordered" {% if request.GET.status == 'Ordered' %}selected{% endif %}>Оформлен</option>
+                        <option value="In Progress" {% if request.GET.status == 'In Progress' %}selected{% endif %}>В работе</option>
+                        <option value="Delivering" {% if request.GET.status == 'Delivering' %}selected{% endif %}>Доставляется</option>
+                        <option value="Completed" {% if request.GET.status == 'Completed' %}selected{% endif %}>Завершен</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mr-3">
+                <div class="form-group mb-0">
+                    <label for="delivery_date">Дата доставки</label>
+                    <input type="date" name="delivery_date" id="delivery_date" class="form-control" value="{{ request.GET.delivery_date }}">
+                </div>
+            </div>
+            <!-- Кнопки фильтрации -->
+            <div class="d-flex align-items-end">
+                <button type="submit" class="btn btn-primary mr-2">Фильтровать</button>
+                <a href="{% url 'admin_orders' %}" class="btn btn-custom">Сбросить фильтры</a>
+            </div>
+        </div>
+    </form>
+
+    <!-- Таблица заказов -->
+    {% for order in orders %}
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="mb-0">Заказ №{{ order.id }}</h5>
+                    <p class="mb-0">Пользователь: {{ order.user }}</p>
+                </div>
+                <div>
+                    <div class="btn-group">
+                        <a href="{% url 'change_order_status' order.id 'Ordered' %}" class="btn btn-custom btn-sm">Оформлен</a>
+                        <a href="{% url 'change_order_status' order.id 'In Progress' %}" class="btn btn-custom btn-sm">В работе</a>
+                        <a href="{% url 'change_order_status' order.id 'Delivering' %}" class="btn btn-custom btn-sm">Доставляется</a>
+                        <a href="{% url 'change_order_status' order.id 'Completed' %}" class="btn btn-custom btn-sm">Завершен</a>
+                        <a href="{% url 'delete_order' order.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Вы уверены, что хотите удалить этот заказ?');">Удалить</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-sm mb-0">
+                <thead>
+                    <tr>
+                        <th>Дата доставки</th>
+                        <th>Время доставки</th>
+                        <th>Адрес</th>
+                        <th>Контакт</th>
+                        <th>Сумма</th>
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ order.delivery_date }}</td>
+                        <td>{{ order.delivery_time }}</td>
+                        <td>{{ order.address }}</td>
+                        <td>{{ order.contact }}</td>
+                        <td>{{ order.total_amount|format_currency }}</td>
+                        <td>{{ order.status }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="bg-secondary text-white">
+            <h5>Состав заказа</h5>
+            <table class="table table-bordered table-sm table-light">
+                <thead>
+                    <tr>
+                        <th>Наименование</th>
+                        <th>Количество</th>
+                        <th>Цена</th>
+                        <th>Итого</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.items.all %}
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.price|format_currency }}</td>
+                        <td>{{ item.quantity|multiply:item.price|format_currency }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">Товары не найдены.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+
+/* Новый стиль для кнопок */
+.btn-custom {
+    background-color: #D3D3D3;
+    border: 1px solid var(--gray);
+    color: var(--text);
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.5rem; /* Уменьшение отступов */
+    font-size: 0.875rem; /* Уменьшение размера шрифта */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-custom:hover {
+    background-color: var(--gray);
+    color: var(--white);
+}
+
+.btn-custom:active {
+    background-color: var(--text);
+    color: var(--white);
+}
+
+/* Стиль для кнопки "Удалить" */
+.btn-danger {
+    background-color: #dc3545; /* Красный цвет */
+    border-color: #dc3545; /* Красный цвет границы */
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.btn-danger:hover {
+    background-color: #c82333; /* Темнее красный при наведении */
+    color: #fff; /* Белый текст при наведении */
+}
+
+.btn-custom, .btn-danger {
+    width: 160px; /* Установите желаемую ширину */
+    text-align: center; /* Центрирование текста */
+}
+.btn-group {
+    white-space: nowrap; /* Запрет перехода на новую строку */
+}
+</style>
+
+{% endblock %}
+

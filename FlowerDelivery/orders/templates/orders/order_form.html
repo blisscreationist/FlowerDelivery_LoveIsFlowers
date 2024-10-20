@@ -1,0 +1,10 @@
+<!-- templates/orders/order_form.html -->
+{% extends 'base.html' %}
+{% block content %}
+<h2>Создание заказа</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Разместить заказ</button>
+</form>
+{% endblock %}

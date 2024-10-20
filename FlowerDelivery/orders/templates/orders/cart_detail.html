@@ -1,0 +1,131 @@
+{% extends 'flowerdelivery/base.html' %}
+{% load custom_filters %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Корзина</h2>
+    <form method="post" action="{% url 'update_cart' %}" id="cart-form">
+        {% csrf_token %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Выбрать</th>
+                    <th>Товар</th>
+                    <th>Количество</th>
+                    <th>Цена</th>
+                    <th>Итого</th>
+                </tr>
+            </thead>
+            <tbody id="cart-items">
+                {% for item in cart_items %}
+                <tr data-item-id="{{ item.id }}">
+                    <td>
+                        <input type="checkbox" name="remove_items" value="{{ item.id }}">
+                    </td>
+                    <td>{{ item.product.name }}</td>
+                    <td>
+                        <input type="number" name="quantity_{{ item.id }}" value="{{ item.quantity }}" min="1" class="form-control form-control-sm quantity-input">
+                    </td>
+                    <td>{{ item.product.price|format_currency }} руб.</td>
+                    <td class="item-total">{{ item.quantity|multiply:item.product.price|format_currency }} руб.</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">Ваша корзина пуста</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="4"><strong>Total</strong></td>
+                    <td><strong id="total-amount">{{ cart_items|calc_total|format_currency }} руб.</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <button type="submit" name="update" class="btn btn-custom">Обновить</button> <br>
+                <button type="submit" name="remove" class="btn btn-custom">Удалить выбранные</button>
+            </div>
+            <a href="{% url 'order_create' %}" class="btn btn-primary">Оформить заказ</a>
+        </div>
+    </form>
+     <div class="button-container">
+    <a class="btn btn-custom" href="{% url 'category_list' %}" role="button">Вернуться в каталог</a>
+</div>
+    <br>
+</div>
+
+<style>
+/* Новый стиль для кнопок */
+.btn-custom {
+    background-color: #D3D3D3;
+    border: 1px solid var(--gray);
+    color: var(--text);
+    border-radius: 0.25rem;
+    padding: 0.375rem 0.75rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-custom:hover {
+    background-color: var(--gray);
+    color: var(--white);
+}
+
+.btn-custom:active {
+    background-color: var(--text);
+    color: var(--white);
+}
+
+.button-container {
+    display: flex; /* Используем flexbox для центрирования */
+    justify-content: center; /* Центрируем кнопку по горизонтали */
+    margin-top: 1.5rem; /* Отступ сверху для кнопки */
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Функция для форматирования валюты
+    function formatCurrency(value) {
+        return value.toLocaleString('ru-RU', { style: 'currency', currency: 'RUB' });
+    }
+
+    // Обработчик изменения количества
+    document.querySelectorAll('.quantity-input').forEach(function(input) {
+        input.addEventListener('change', function() {
+            var row = input.closest('tr');
+            var itemId = row.getAttribute('data-item-id');
+            var quantity = parseInt(input.value);
+            var priceText = row.querySelector('td:nth-child(4)').textContent.replace(' руб.', '').replace(/\s/g, '');
+            var price = parseFloat(priceText.replace(',', '.'));
+
+            // Пересчитываем итог по строке
+            var itemTotal = (quantity * price).toFixed(2);
+            row.querySelector('.item-total').textContent = formatCurrency(parseFloat(itemTotal));
+
+            // Пересчитываем общий итог
+            var totalAmount = 0;
+            document.querySelectorAll('.item-total').forEach(function(itemTotalCell) {
+                var itemTotalValue = parseFloat(itemTotalCell.textContent.replace(' руб.', '').replace(/\s/g, '').replace(',', '.'));
+                totalAmount += itemTotalValue;
+            });
+
+            document.getElementById('total-amount').textContent = formatCurrency(totalAmount);
+
+            // Отправляем форму для обновления данных
+            var form = document.getElementById('cart-form');
+            var formData = new FormData(form);
+            formData.append('update', 'Обновить');
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', form.action, true);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // Обновление успешно завершено
+                    console.log('Cart updated successfully');
+                }
+            };
+            xhr.send(formData);
+        });
+    });
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'flowerdelivery/base.html' %}
+
+{% block content %}
+<h1>Средний рейтинг товаров</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Название товара</th>
+            <th>Средний рейтинг</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+        <tr>
+            <td>{{ product.name }}</td>
+            <td>{{ product.average_rating|floatformat:1 }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="2">Нет данных для отображения</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

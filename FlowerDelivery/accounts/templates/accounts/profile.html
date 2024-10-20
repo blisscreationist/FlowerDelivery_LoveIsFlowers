@@ -1,0 +1,52 @@
+<!-- accounts/profile.html -->
+{% extends 'flowerdelivery/base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+<script src="{% static 'js/scripts.js' %}"></script>
+
+<div class="container mt-4">
+    <h2 class="mb-4">Редактирование профиля</h2>
+    <form method="post" enctype="multipart/form-data" class="mb-4">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+    </form>
+
+    {% if user.avatar %}
+        <h3 class="mb-3">Ваш аватар:</h3>
+        <img src="{{ user.avatar.url }}" alt="Avatar" class="img-fluid mb-4" style="max-width: 150px; max-height: 150px;">
+    {% endif %}
+
+    <div class="button-container">
+        <a class="btn btn-custom" href="{% url 'password_change' %}" role="button">Сменить пароль</a>
+    </div>
+</div>
+
+<style>
+/* Новый стиль для кнопок */
+.btn-custom {
+    background-color: #D3D3D3;
+    border: 1px solid var(--gray);
+    color: var(--text);
+    border-radius: 0.25rem;
+    padding: 0.375rem 0.75rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-custom:hover {
+    background-color: var(--gray);
+    color: var(--white);
+}
+
+.btn-custom:active {
+    background-color: var(--text);
+    color: var(--white);
+}
+</style>
+
+{% endblock %}
+

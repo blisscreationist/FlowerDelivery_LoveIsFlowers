@@ -1,0 +1,92 @@
+﻿<!-- catalog/templates/catalog/product_detail.html -->
+{% extends 'flowerdelivery/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <article class="card">
+        <div class="card__preview">
+            <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.name }}">
+            <div class="card__price">
+                {{ product.price }} руб.
+            </div>
+        </div>
+        <div class="card__content">
+            <h1 class="card__title">{{ product.name }}</h1>
+            <p class="card__description">{{ product.description }}</p>
+            <!-- Добавление в корзину -->
+            <form method="post" action="{% url 'add_to_cart' %}" class="form-inline">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <input type="number" name="quantity" value="1" min="1" class="form-control mr-2">
+                <button type="submit" class="btn btn-primary">В корзину</button>
+            </form>
+        </div>
+    </article>
+</div>
+
+<style>
+:root {
+    --primary: #111926;
+    --white: #fff;
+    --background: #F8F8FF;
+    --gray: #D3D3D3;
+    --text: #262626;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.card {
+    background: var(--white);
+    border-radius: 1.5rem;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 6px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: 22rem; /* Ширина карточки */
+}
+
+.card__preview {
+    height: 12rem;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.card__preview img {
+    width: 100%;
+    height: 100%; /* Задаем высоту изображения */
+    object-fit: cover;
+}
+
+.card__price {
+    background-color: var(--white);
+    color: var(--text);
+    z-index: 1;
+    position: absolute;
+    bottom: 1.25rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    left: 1.25rem;
+    font-weight: bold;
+}
+
+.card__content {
+    padding: 1.25rem;
+    color: var(--text);
+}
+
+.card__title {
+    margin: 0.5rem 0;
+}
+
+.card__description {
+    margin-top: 0.5rem;
+}
+</style>
+{% endblock %}
+

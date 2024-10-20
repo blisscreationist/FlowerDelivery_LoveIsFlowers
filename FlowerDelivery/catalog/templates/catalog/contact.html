@@ -1,0 +1,40 @@
+<!-- flowerdelivery/templates/contact.html -->
+
+<!-- flowerdelivery/templates/contact.html -->
+{% extends 'flowerdelivery/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Контакты</h2>
+    <h4>Будем рады видеть Вас в нашем салоне!</h4>
+    <p>Мы находимся по адресу: 119071, г. Москва, Ленинский проспект, 33 </p>
+    <p>тел. +7 901 111-11-11 </p>
+    <p>Вы можете быстро оформить заказ в нашем <a href="https://t.me/LoveIsFlowersBot" target="_blank">Телеграм-боте @LoveIsFlowersBot</a></p>
+
+    <!-- Контейнер для карты -->
+    <div id="map" style="height: 400px;"></div>
+</div>
+
+<!-- Подключение Яндекс.Карт API -->
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=16543d96-c13f-43ad-8490-0314e8814f41" type="text/javascript"></script>
+<script>
+    // Инициализация карты
+    ymaps.ready(init);
+    function init() {
+        var myMap = new ymaps.Map("map", {
+            center: [55.712021, 37.588647], // Координаты центра карты
+            zoom: 10 // Уровень масштабирования
+        });
+
+        // Создание маркера
+        var myPlacemark = new ymaps.Placemark([55.712021, 37.588647], {
+            balloonContent: 'Мы находимся здесь!' // Содержимое балуна
+        });
+
+        // Добавление маркера на карту
+        myMap.geoObjects.add(myPlacemark);
+    }
+</script>
+{% endblock %}
+
+

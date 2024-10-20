@@ -1,0 +1,11 @@
+<!-- templates/orders/order_success.html -->
+
+{% extends 'flowerdelivery/base.html' %}
+{% load custom_filters %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Заказ подтвержден</h2>
+    <p>Спасибо за ваш заказ. Информация о заказе будет направлена в Telegram (если вы оставили свой ID).</p>
+    <a href="{% url 'category_list' %}" class="btn btn-primary">Продолжить покупки</a>
+</div>
+{% endblock %}

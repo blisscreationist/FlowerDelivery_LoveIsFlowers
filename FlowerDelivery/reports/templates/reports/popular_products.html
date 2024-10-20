@@ -1,0 +1,27 @@
+{% extends 'flowerdelivery/base.html' %}
+
+{% block title %}Отчет о самых популярных товарах{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Отчет о самых популярных товарах за последние 30 дней</h1>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Товар</th>
+                <th>Количество</th>
+                <th>Общая сумма</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in sales_data %}
+            <tr>
+                <td>{{ item.product__name }}</td>
+                <td>{{ item.total_quantity }}</td>
+                <td>{{ item.total_amount }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,89 @@
+<!-- catalog/templates/catalog/category_list.html -->
+{% extends 'flowerdelivery/base.html' %}
+{% load static %}
+{% block content %}
+<h1>Наши цветы</h1>
+<div class="gallery">
+    {% for category in categories %}
+    <figure class="card">
+        <a href="{% url 'category_detail' category.id %}" class="category-link">
+            <span class="category-name">{{ category.name }}</span>
+            <img src="{{ category.image_url.url }}" alt="{{ category.name }}" class="category-image">
+        </a>
+    </figure>
+    {% empty %}
+    <figure class="card">
+        <img src="{% static 'images/default.jpg' %}" alt="Категории не найдены">
+    </figure>
+    {% endfor %}
+</div>
+
+<style>
+:root {
+    --background:  #E6E6FA;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+
+/* Новая часть: стиль для контента после хедера */
+.gallery {
+    display: flex;
+    gap: 1rem;
+    width: 100%; /* Занимает полную ширину */
+    max-width: 80rem; /* Максимальная ширина, если нужно */
+    flex-wrap: wrap; /* Позволяет карточкам переноситься на следующую строку */
+    margin-top: 2rem; /* Отступ сверху для разделения с хедером */
+}
+
+.card {
+    position: relative;
+    width: 6rem;
+    height: 20rem;
+    overflow: hidden;
+    background: var(--background);
+    transition: flex 0.4s ease-in-out;
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3);
+    flex: 0.25;
+    border-radius: 1rem; /* Закругляем углы */
+    cursor: pointer; /* Указатель при наведении */
+}
+
+.category-link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-decoration: none; /* Убираем подчеркивание */
+    color: inherit; /* Унаследуем цвет текста */
+}
+
+.category-name {
+    text-align: center; /* Выравнивание текста по центру */
+    font-weight: bold; /* Жирный шрифт */
+    padding: 0.5rem 0; /* Отступы для текста */
+    background: rgba(255, 255, 255, 0.8); /* Полупрозрачный фон для текста */
+}
+
+.category-image {
+    width: 100%; /* Ширина изображения 100% */
+    height: auto; /* Высота автоматически подстраивается */
+    object-fit: cover; /* Изображение обрезается, чтобы заполнить карточку */
+    transition: transform 0.4s ease; /* Плавный переход при наведении */
+}
+
+.card:hover {
+    flex: 2; /* Увеличиваем карточку при наведении */
+}
+
+.card:hover .category-image {
+    transform: scale(1.1); /* Увеличиваем изображение при наведении */
+}
+</style>
+
+{% endblock %}
+

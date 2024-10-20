@@ -1,0 +1,122 @@
+{% extends 'flowerdelivery/base.html' %}
+{% load custom_filters %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Оформление заказа</h2>
+
+    <!-- Оформление формы заказа -->
+    <form method="post" class="mb-4">
+        {% csrf_token %}
+
+        <!-- Показ ошибок формы -->
+        <div class="form-group">
+            {{ form.non_field_errors }}
+        </div>
+
+        <!-- Поля формы в компактном виде -->
+        <div class="form-row mb-3">
+            <div class="col-md-4">
+                <label for="{{ form.address.id_for_label }}" class="form-label">Адрес</label>
+            </div>
+            <div class="col-md-8">
+                <textarea id="{{ form.address.id_for_label }}" name="{{ form.address.html_name }}" class="form-control" rows="3">{{ form.address.value }}</textarea>
+                {{ form.address.errors }}
+            </div>
+        </div>
+        <div class="form-row mb-3">
+            <div class="col-md-4">
+                <label for="{{ form.delivery_date.id_for_label }}" class="form-label">Дата доставки</label>
+            </div>
+            <div class="col-md-8">
+                <input type="date" id="{{ form.delivery_date.id_for_label }}" name="{{ form.delivery_date.html_name }}" class="form-control" value="{{ form.delivery_date.value }}" />
+                {{ form.delivery_date.errors }}
+            </div>
+        </div>
+        <div class="form-row mb-3">
+            <div class="col-md-4">
+                <label for="{{ form.delivery_time.id_for_label }}" class="form-label">Время доставки</label>
+            </div>
+            <div class="col-md-8">
+                {{ form.delivery_time }}
+                {{ form.delivery_time.errors }}
+            </div>
+        </div>
+        <div class="form-row mb-3">
+            <div class="col-md-4">
+                <label for="{{ form.telephone.id_for_label }}" class="form-label">Телефон:</label>
+            </div>
+            <div class="col-md-8">
+                <input type="text" id="{{ form.telephone.id_for_label }}" name="{{ form.telephone.html_name }}" class="form-control" value="{{ form.telephone.value }}" />
+                {{ form.telephone.errors }}
+            </div>
+        </div>
+
+        <!-- Кнопка отправки формы -->
+        <button type="submit" class="btn btn-primary">Подтвердить заказ</button>
+    </form>
+
+    <!-- Итоговый список товаров -->
+    <h3>Ваши цветы</h3>
+    {% if cart_items %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Цветы</th>
+                <th>Количество</th>
+                <th>Цена</th>
+                <th>Итого</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.product.price|format_currency }} руб.</td>
+                <td>{{ item.quantity|multiply:item.product.price|format_currency }} руб.</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">Ваша корзина пуста.</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3"><strong>Итого:</strong></td>
+                <td><strong>{{ cart_items|calc_total|format_currency }} руб.</strong></td>
+            </tr>
+        </tbody>
+    </table>
+    {% else %}
+    <p>Ваша корзина пуста</p>
+    {% endif %}
+</div>
+
+<!-- CSS для корректного выравнивания формы -->
+<style>
+    .form-row {
+        display: flex;
+        align-items: center;
+    }
+    .form-label {
+        width: 100px;
+        text-align: left;
+        margin-right: 100px; /* Отступ между меткой и полем */
+    }
+</style>
+
+<!-- JavaScript для ограничения даты -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var today = new Date();
+        var minDate = new Date();
+        minDate.setDate(today.getDate() + 1); // Завтрашний день
+        var maxDate = new Date();
+        maxDate.setDate(today.getDate() + 8); // 8 дней вперед
+
+        var dateInput = document.getElementById('{{ form.delivery_date.id_for_label }}');
+        dateInput.min = minDate.toISOString().split('T')[0];
+        dateInput.max = maxDate.toISOString().split('T')[0];
+    });
+</script>
+
+{% endblock %}

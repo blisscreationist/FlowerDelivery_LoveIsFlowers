@@ -1,0 +1,6 @@
+{% extends 'flowerdelivery/base.html' %}
+
+{% block content %}
+<h1>Среднее количество заказов на покупателя</h1>
+<p>Среднее количество заказов на одного покупателя: {{ average_orders|floatformat:2 }}</p>
+{% endblock %}

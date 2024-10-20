@@ -1,0 +1,245 @@
+{% extends 'flowerdelivery/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="jumbotron">
+        <h3 class="display-4">Добро пожаловать  в мир потрясающих цветов <br>с Love is Flowers🌸</h3>
+        <p class="lead">Ваш идеальный букет — свежие цветы и креативные решения для незабываемых моментов!</p>
+        <hr class="my-4">
+        <a class="btn btn-primary btn-lg" href="{% url 'category_list' %}" role="button">Перейти в каталог</a>
+    </div>
+
+    <!-- Бесконечная карусель -->
+    <div class="brand-list" style="overflow: hidden; box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3); border: 2px solid #ccc; width: 100%; margin: 20px 0;">
+        <div class="wrapper" style="display: grid; grid-auto-flow: column; grid-auto-columns: 400px; animation: scroll 10s linear infinite; transform: translateX(calc(-50% + 80px));">
+            <div><img src="{% static 'img/Piones_1.jpg' %}" alt="img1" style="width: 100%; height: auto;"></div>
+            <div><img src="{% static 'img/Bou_1.jpg' %}" alt="img2" style="width: 100%; height: auto;"></div>
+            <div><img src="{% static 'img/Bou_2.jpg' %}" alt="img3" style="width: 100%; height: auto;"></div>
+            <div><img src="{% static 'img/Bou_3.jpg' %}" alt="img4" style="width: 100%; height: auto;"></div>
+            <div><img src="{% static 'img/Bou_4.jpg' %}" alt="img5" style="width: 100%; height: auto;"></div>
+            <div><img src="{% static 'img/Bou_1.jpg' %}" alt="img6" style="width: 100%; height: auto;"></div>
+        </div>
+    </div>
+    <br>
+    <br>
+<!-- Карточки Отображение -->
+<section class="destinations">
+        <div class="container">
+            <h2 class="title title__fz-32 destinations__title">Покупатели о Love is Flowers</h2>
+            <ul class="cards">
+                <li>
+                    <a href="" class="card">
+                        <img src="{% static 'img/Card_1.jpg' %}" class="card__image" alt="Цветок 1" />
+                        <div class="card__overlay">
+                            <div class="card__header">
+                                <svg class="card__arc" xmlns="http://www.w3.org/2000/svg"><path /></svg>
+                                <img class="card__thumb" src="{% static 'img/av_1.png' %}" alt="Цветок 1" />
+                                <div class="card__header-text">
+                                    <h3 class="card__title">Ольга</h3>
+                                    <span class="card__status">1 час назад</span>
+                                </div>
+                            </div>
+                            <p class="card__description">Этот букет гортензий превзошел все мои ожидания — такой нежный и свежий, это лучший подарок для любимых!</p>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="card">
+                        <img src="{% static 'img/Piones_1.jpg' %}" class="card__image" alt="Цветок 2" />
+                        <div class="card__overlay">
+                            <div class="card__header">
+                                <svg class="card__arc" xmlns="http://www.w3.org/2000/svg"><path /></svg>
+                                <img class="card__thumb" src="{% static 'img/av_2.png' %}" alt="Цветок 2" />
+                                <div class="card__header-text">
+                                    <h3 class="card__title">Елена</h3>
+                                    <span class="card__status">3 часа назад</span>
+                                </div>
+                            </div>
+                            <p class="card__description">Потрясающий букет! Я очень люблю пионы и не могу устоять перед их природной красотой, но не могла себе представить, что можно подобрать столь идеальные цветы и упаковку для букета!</p>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="card">
+                        <img src="{% static 'img/Card_3.jpg' %}" class="card__image" alt="Цветок 3" />
+                        <div class="card__overlay">
+                            <div class="card__header">
+                                <svg class="card__arc" xmlns="http://www.w3.org/2000/svg"><path /></svg>
+                                <img class="card__thumb" src="{% static 'img/av_3.png' %}" alt="Цветок 3" />
+                                <div class="card__header-text">
+                                    <h3 class="card__title">Мария</h3>
+                                    <span class="card__status">3 часа назад</span>
+                                </div>
+                            </div>
+                            <p class="card__description">Это без преувеличения самый нежный и красивый букет, который я видела в своей жизни! Теперь я точно знаю где можно заказать красивый букет для любого повода!</p>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="card">
+                        <img src="{% static 'img/Card_4.jpg' %}" class="card__image" alt="Цветок 4" />
+                        <div class="card__overlay">
+                            <div class="card__header">
+                                <svg class="card__arc" xmlns="http://www.w3.org/2000/svg"><path /></svg>
+                                <img class="card__thumb" src="{% static 'img/av_5.png' %}" alt="Цветок 4" />
+                                <div class="card__header-text">
+                                    <h3 class="card__title">Юлия</h3>
+                                    <span class="card__status">5 часов назад</span>
+                                </div>
+                            </div>
+                            <p class="card__description">Я в полном восторге от этого потрясающего, яркого букета! Спасибо девушкам из Love is Flowers за их исключительное чувство красоты и гармонии!</p>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+    <div class="button-container">
+    <a class="btn btn-primary btn-lg" href="{% url 'category_list' %}" role="button">Перейти в каталог</a>
+</div>
+            </div>
+    </section>
+
+
+<style>
+   :root {
+  --surface-color: #fff;
+  --curve: 40;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background-color: #E6E6FA;
+}
+
+.jumbotron {
+    background-color: #D8BFD8; /* Устанавливаем цвет фона jumbotron */
+    color: #FFF; /* Устанавливаем цвет текста внутри jumbotron */
+    border-radius: 15px; /* Округлые углы для jumbotron */
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 4rem 5vw;
+  padding: 0;
+  list-style-type: none;
+}
+
+.card {
+  position: relative;
+  display: block;
+  height: 100%;
+  border-radius: calc(var(--curve) * 1px);
+  overflow: hidden;
+  text-decoration: none;
+  background-color: #D8BFD8;
+}
+
+.card__image {
+  width: 100%;
+  height: auto;
+}
+
+.card__overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  border-radius: calc(var(--curve) * 1px);
+  background-color: var(--surface-color);
+  transform: translateY(100%);
+  transition: .2s ease-in-out;
+}
+
+.card:hover .card__overlay {
+  transform: translateY(0);
+}
+
+.card__header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2em;
+  padding: 2em;
+  border-radius: calc(var(--curve) * 1px) 0 0 0;
+  background-color: var(--surface-color);
+  transform: translateY(-100%);
+  transition: .2s ease-in-out;
+}
+
+.card__arc {
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  z-index: 1;
+}
+
+.card__arc path {
+  fill: var(--surface-color);
+  d: path("M 40 80 c 22 0 40 -22 40 -40 v 40 Z");
+}
+
+.card:hover .card__header {
+  transform: translateY(0);
+}
+
+.card__thumb {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.card__title {
+  font-size: 1em;
+  margin: 0 0 .3em;
+  color: #6A515E;
+}
+
+.card__tagline {
+  display: block;
+  margin: 1em 0;
+  font-family: "MockFlowFont";
+  font-size: .8em;
+  color: #D7BDCA;
+}
+
+.card__status {
+  font-size: .8em;
+  color: #D7BDCA;
+}
+
+.card__description {
+  padding: 0 2em 2em;
+  margin: 0;
+  color: #D7BDCA;
+  font-family: "MockFlowFont";
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.button-container {
+    display: flex; /* Используем flexbox для центрирования */
+    justify-content: center; /* Центрируем кнопку по горизонтали */
+    margin-top: 1.5rem; /* Отступ сверху для кнопки */
+}
+
+    @keyframes scroll {
+        to {
+            transform: translateX(calc(-50% - 360px));
+        }
+    }
+</style>
+
+{% endblock %}

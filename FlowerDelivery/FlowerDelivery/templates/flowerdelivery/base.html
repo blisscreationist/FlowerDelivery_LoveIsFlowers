@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flower Delivery</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        body {
+            background-color: #E6E6FA; /* Установим цвет фона */
+        }
+        button, .btn {
+            color: #FFF;
+            border: 2px solid rgb(216, 2, 134);
+            width: 220px; /* Ширина кнопки */
+            height: 60px; /* Высота кнопки */
+            font-family: sans-serif;
+            font-size: 15px;
+            cursor: pointer;
+            box-shadow: inset 0 0 0 0 #D80286;
+            transition: ease-out 1s;
+            background: #162944; /* Цвет фона кнопки */
+            display: flex; /* Используем flexbox */
+            align-items: center; /* Центрируем по вертикали */
+            justify-content: center; /* Центрируем по горизонтали */
+            border-radius: 20px; /* Округлые углы */
+            padding: 0; /* Убираем отступы, если они есть */
+        }
+        button:hover, .btn:hover {
+            box-shadow: inset 400px 0 100px 0 #D80286; /* Эффект при наведении */
+        }
+        /* Стили для ссылки "Выйти" */
+        .logout-link {
+            color: #007bff; /* Синий цвет текста */
+            font-weight: bold; /* Жирный шрифт */
+            text-decoration: none; /* Убираем подчеркивание */
+            padding: 8px 10px; /* Отступы для удобства */
+            cursor: pointer; /* Указатель при наведении */
+        }
+
+        .logout-link:hover {
+            text-decoration: underline; /* Подчеркивание при наведении */
+        }
+
+        .highlight-link {
+    color: #007bff; /* Синий цвет текста */
+            font-weight: bold; /* Жирный шрифт */
+            text-decoration: none; /* Убираем подчеркивание */
+            padding: 8px 10px; /* Отступы для удобства */
+            cursor: pointer; /* Указатель при наведении */
+}
+
+.highlight-link:hover {
+    text-decoration: underline; /* Подчеркивание при наведении */
+}
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <img src="{% static 'img/logo2.jpg' %}" alt="Логотип" style="height: 60px;"> <!-- Логотип -->
+            Love is Flowers
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto d-flex flex-row align-items-center"> <!-- Добавлено d-flex и align-items-center -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'category_list' %}">Каталог</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'contact' %}">Контакты</a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'cart_detail' %}">Корзина</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'order_list' %}">Мои заказы</a>
+                </li>
+                <li class="nav-item">
+                    {% if user.avatar %}
+                        <a class="nav-link" href="{% url 'profile' %}">
+                            <img src="{{ user.avatar.url }}" alt="Аватар" style="height: 40px; width: 40px; border-radius: 50%;">
+                        </a>
+                    {% else %}
+                        <a class="nav-link" href="{% url 'profile' %}">Профиль</a>
+                    {% endif %}
+                </li>
+
+                {% if user.is_staff %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="adminReportsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Отчеты
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="adminReportsDropdown">
+                        <a class="dropdown-item" href="{% url 'sales_report' %}">Общие продажи</a>
+                        <a class="dropdown-item" href="{% url 'popular_products' %}">Популярные товары</a>
+                        <a class="dropdown-item" href="{% url 'average_orders' %}">Среднее количество заказов на покупателя</a>
+                        <a class="dropdown-item" href="{% url 'average_ratings' %}">Средний рейтинг товаров</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'admin_orders' %}">Просмотр заказов</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://127.0.0.1:8000/admin">Панель администратора</a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <form action="{% url 'logout' %}" method="post" class="form-inline">
+                        {% csrf_token %}
+                        <a href="#" onclick="event.preventDefault(); this.closest('form').submit();" class="nav-link">Выйти</a>
+                    </form>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Войти</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'signup' %}">Зарегистрироваться</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    {% if messages %}
+        <div class="toast-panel">
+            {% for message in messages %}
+                <div class="toast-item {{ message.tags }}">
+                    <div class="toast {{ message.tags }}">
+                        <label class="close" onclick="this.parentElement.parentElement.style.display='none';">×</label>
+                        <h3>{{ message.tags|capfirst }}!</h3>
+                        <p>{{ message }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const toastItems = document.querySelectorAll('.toast-item');
+            toastItems.forEach(item => {
+                item.classList.add('show');
+                setTimeout(() => {
+                    item.classList.remove('show');
+                }, 4000); // Скрыть через 4 секунды
+            });
+        });
+    </script>
+
+    <footer class="bg-light text-secondary text-center py-3 mt-4">
+        <p>&copy; 2024 Love is Flowers. Все права защищены.</p>
+        <p>
+            <a href="{% url 'contact' %}" class="text-secondary highlight-link">Контакты</a> тел. +7 901 111-11-11
+             <p>Наш <a href="https://t.me/LoveIsFlowersBot" target="_blank">Телеграм-бот @LoveIsFlowersBot </a></p>
+        </p>
+        <p>сайт создан &copy;Bliss Creation aka Константин Волков</p>
+        <img src="{% static 'img/Bliss Creation_Logo_1024.jpg' %}" alt="Логотип" class="mb-2" style="height: 60px;">
+    </footer>
+</body>
+</html>
+
